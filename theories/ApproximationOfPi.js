@@ -86,9 +86,7 @@ var getPrimaryEquation = () => {
     return result;
 }
 
-var getSecondaryEquation = () => {
-    return Utils.getMath("\\tau = \\max \\rho^{1.2}") + "\nρ = " + currency.value.toString();
-};
+var getSecondaryEquation = () => Utils.getMath("\\tau = \\max \\rho^{1.2}");
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value.pow(1.2);
