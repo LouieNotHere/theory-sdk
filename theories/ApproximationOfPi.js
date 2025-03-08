@@ -87,7 +87,7 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => {
-    let rhoStr = currency.value.toString();
+    let rhoStr = currency.value.toNumber().toFixed(2); // Rounds to 2 decimal places
     return Utils.getMath("\\tau = \\max \\rho^{1.2} \\quad , \\quad \\rho = " + rhoStr);
 };
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
