@@ -16,7 +16,7 @@ var c1ExpBoost, c2ExpBoost, c3Unlock, c4Unlock;
 var piExp;
 
 var achievement1, secretAchievement1, secretAchievement2;
-var chapter1, chapter2, chapter3;
+var chapter1, chapter2, chapter3, chapter4, chapter5;
 
 var init = () => {
     currency = theory.createCurrency();
@@ -83,6 +83,8 @@ var init = () => {
     chapter1 = theory.createStoryChapter(0, "Prologue", "You are a young mathematician.\nYour professor tells you approximate the value of pi.\nAs you got home, you took a small research about it.\nFortunately, no one has approximated the actual value of pi.\nFor now, you are attempting to approximate the value of pi.\nWill you be able to reach the usual value?", () => piAccuracy.level >= 0);
     chapter2 = theory.createStoryChapter(1, "The Approximation Begins", "You have reached the usual value.\nBut it seemed like it's not enough.\nYou asked your professor about this.\nHe advised you to try and approximate it further.\nSo you went to your desk, and try to do what he said.", () => piAccuracy.level >= 3);
     chapter3 = theory.createStoryChapter(2, "Bizzare Numbers", "It took you a long time to approximate the value.\nYou showed the work, and your professor isn't happy.\nHe said that the numbers are too basic, and it needs more decimals.\nSo you attempt to work on it once more.", () => piAccuracy.level >= 10);
+    chapter4 = theory.createStoryChapter(3, "Approximating Further", "After some time, you managed to approximate the value of pi.\nIt felt like you are the only one who has done it.\nOnce again, you showed the work to your professor.\nHe was shocked to see the 25 digits of pi.\nHe feels so proud of you, and he advises you to keep the approximation up.\nYou took the advise, and got to focusing on approximating this value much further.", () => piAccuracy.level >= 25);
+    chapter5 = theory.createStoryChapter(4, "More Digits!", "As you keep approximating, you find this job so easy.\nBut it's not as easy as you could think.\nAs you progress, the approximation gets harder.\nIt felt like the value of pi is just endless.\nInstead of attempting to approximate this further, you make a program that attempts to do the job for you.", () => piAccuracy.level >= 50);
 
     updateAvailability();
 }
