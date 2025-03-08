@@ -97,18 +97,19 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    let piBonus = getPiBonus((piAccuracy.level * Math.PI), piExp.level);
+    let piBonus = getPiBonus(piAccuracy.level, piExp.level);
+    let piAccCont = piAccuracy.level * Math.PI;
     let c1Value = getC1(c1.level);
     let c2Value = getC2(c2.level);
     let c3Value = c3Unlock.level > 0 ? getC3(c3.level) : BigNumber.ONE;
     let c4Value = c4Unlock.level > 0 ? getC4(c4.level) : BigNumber.ONE;
 
-    currency.value += dt * bonus * piBonus * c1Value * c2Value * c3Value * c4Value;
+    currency.value += piAccCont * dt * bonus * piBonus * c1Value * c2Value * c3Value * c4Value;
 }
 
 var getPiBonus = (level, exponentLevel) => {
     let digits = level + 1;
-    let baseBonus = BigNumber.from(1 + Math.log10(1 + digits)).min(10);
+    let baseBonus = BigNumber.from(1 + Math.log10(1 + digits)).min(25);
     let exponent = BigNumber.from(1 + 0.05 * exponentLevel);
     return baseBonus.pow(exponent);
 }
