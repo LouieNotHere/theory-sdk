@@ -116,8 +116,8 @@ var getPiBonus = (level, exponentLevel) => {
     return baseBonus.pow(exponent);
 }
 
-var getC1 = (level) => BigNumber.from(1 + 0.50 * level);
-var getC2 = (level) => BigNumber.from(1 + 0.75 * level);
+var getC1 = (level) => BigNumber.from(1.50).pow(level);
+var getC2 = (level) => BigNumber.from(1.75).pow(level);
 var getC3 = (level) => BigNumber.from(2).pow(level);
 var getC4 = (level) => BigNumber.from(2.5).pow(level);
 
