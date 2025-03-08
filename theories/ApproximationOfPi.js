@@ -11,7 +11,8 @@ var authors = "Louie Soulen Kurenai (@paytouse on Discord)";
 var version = 2;
 
 var currency;
-var piAccuracy, c1, c2;
+var piAccuracy, c1, c2, c3, c4;
+var c1ExpBoost, c2ExpBoost, c3Unlock, c4Unlock;
 var piExp;
 
 var achievement1, secretAchievement1, secretAchievement2;
@@ -43,6 +44,38 @@ var init = () => {
     piExp.info = Localization.getUpgradeIncCustomExpInfo("π Bonus", "0.05");
     piExp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
 
+    c1ExpBoost = theory.createMilestoneUpgrade(1, 3);
+    c1ExpBoost.description = Localization.getUpgradeIncCustomExpDesc("c_1 exponent", "0.05");
+    c1ExpBoost.info = Localization.getUpgradeIncCustomExpInfo("c_1 exponent", "0.05");
+    c1ExpBoost.boughtOrRefunded = (_) => updateAvailability();
+
+    c2ExpBoost = theory.createMilestoneUpgrade(2, 3);
+    c2ExpBoost.description = Localization.getUpgradeIncCustomExpDesc("c_2 exponent", "0.05");
+    c2ExpBoost.info = Localization.getUpgradeIncCustomExpInfo("c_2 exponent", "0.05");
+    c2ExpBoost.boughtOrRefunded = (_) => updateAvailability();
+
+    c3Unlock = theory.createMilestoneUpgrade(3, 1);
+    c3Unlock.description = "Unlocks c_3";
+    c3Unlock.info = "Add c_3 to the formula";
+    c3Unlock.boughtOrRefunded = (_) => updateAvailability();
+
+    c4Unlock = theory.createMilestoneUpgrade(4, 1);
+    c4Unlock.description = "Unlocks c_4";
+    c4Unlock.info = "Add c_4 to the formula";
+    c4Unlock.boughtOrRefunded = (_) => updateAvailability();
+
+    if (c3Unlock.level > 0) {
+        c3 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(3)));
+        c3.getDescription = (_) => Utils.getMath("c_3=" + getC3(c3.level).toString(2));
+        c3.getInfo = (amount) => Utils.getMathTo(getC3(c3.level).toString(2), getC3(c3.level + amount).toString(2));
+    }
+
+    if (c4Unlock.level > 0) {
+        c4 = theory.createUpgrade(4, currency, new ExponentialCost(75, Math.log2(4)));
+        c4.getDescription = (_) => Utils.getMath("c_4=" + getC4(c4.level).toString(2));
+        c4.getInfo = (amount) => Utils.getMathTo(getC4(c4.level).toString(2), getC4(c4.level + amount).toString(2));
+    }
+    
     achievement1 = theory.createAchievement(0, "Basic Approximation", "Correctly approximate at least 3 digits of pi.", () => piAccuracy.level >= 3);
     secretAchievement1 = theory.createSecretAchievement(1, "Approximator", "Approximate the first 10 digits of pi.", "You're actually into approximating numbers, are you?", () => piAccuracy.level >= 10);
     secretAchievement2 = theory.createSecretAchievement(2, "Master of Approximation", "Approximate the 100 digits of pi.", "Oh boy...", () => piAccuracy.level >= 100);
@@ -54,7 +87,12 @@ var init = () => {
     updateAvailability();
 }
 
-var updateAvailability = () => {}
+var updateAvailability = () => {
+    let canUnlockC3 = c1ExpBoost.level === 3 && c2ExpBoost.level === 3;
+    
+    c3Unlock.isAvailable = canUnlockC3;
+    c4Unlock.isAvailable = c3Unlock.level === 1;
+}
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
@@ -62,8 +100,10 @@ var tick = (elapsedTime, multiplier) => {
     let piBonus = getPiBonus(piAccuracy.level, piExp.level);
     let c1Value = getC1(c1.level);
     let c2Value = getC2(c2.level);
-    
-    currency.value += dt * bonus * piBonus * c1Value * c2Value;
+    let c3Value = c3Unlock.level > 0 ? getC3(c3.level) : BigNumber.ONE;
+    let c4Value = c4Unlock.level > 0 ? getC4(c4.level) : BigNumber.ONE;
+
+    currency.value += dt * bonus * piBonus * c1Value * c2Value * c3Value * c4Value;
 }
 
 var getPiBonus = (level, exponentLevel) => {
@@ -75,6 +115,8 @@ var getPiBonus = (level, exponentLevel) => {
 
 var getC1 = (level) => BigNumber.from(1 + 0.01 * level);
 var getC2 = (level) => BigNumber.from(1 + 0.02 * level);
+var getC3 = (level) => BigNumber.from(2).pow(level);
+var getC4 = (level) => BigNumber.from(2.5).pow(level);
 
 var getPrimaryEquation = () => {
     let result = "\\dot{\\rho} = Bonus(π) \\times c_1 \\times c_2";
