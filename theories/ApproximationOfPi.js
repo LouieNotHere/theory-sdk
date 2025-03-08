@@ -97,7 +97,7 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    let piBonus = getPiBonus(piAccuracy.level, piExp.level);
+    let piBonus = getPiBonus((piAccuracy.level * Math.PI), piExp.level);
     let c1Value = getC1(c1.level);
     let c2Value = getC2(c2.level);
     let c3Value = c3Unlock.level > 0 ? getC3(c3.level) : BigNumber.ONE;
