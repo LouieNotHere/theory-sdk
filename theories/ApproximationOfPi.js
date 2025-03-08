@@ -26,11 +26,11 @@ var init = () => {
     piAccuracy.getInfo = (amount) => Utils.getMathTo("dπ = " + (piAccuracy.level + 1), "dπ = " + (piAccuracy.level + amount + 1));
 
     c1 = theory.createUpgrade(1, currency, new ExponentialCost(15, Math.log2(2)));
-    c1.getDescription = (_) => Utils.getMath("c_1=1.5^{" + c1.level + "}");
+    c1.getDescription = (_) => Utils.getMath("c_1=" + getC1(c1.level).toString(2));
     c1.getInfo = (amount) => Utils.getMathTo(getC1(c1.level).toString(2), getC1(c1.level + amount).toString(2));
 
     c2 = theory.createUpgrade(2, currency, new ExponentialCost(20, Math.log2(2.5)));
-    c2.getDescription = (_) => Utils.getMath("c_2=1.75^{" + c2.level + "}");
+    c2.getDescription = (_) => Utils.getMath("c_2=" + getC2(c2.level).toString(2));
     c2.getInfo = (amount) => Utils.getMathTo(getC2(c2.level).toString(2), getC2(c2.level + amount).toString(2));
 
     theory.createPublicationUpgrade(0, currency, 1e10);
@@ -116,8 +116,8 @@ var getPiBonus = (level, exponentLevel) => {
     return baseBonus.pow(exponent);
 }
 
-var getC1 = (level) => BigNumber.from(1.50).pow(level);
-var getC2 = (level) => BigNumber.from(1.75).pow(level);
+var getC1 = (level) => BigNumber.from(1 + 0.50);
+var getC2 = (level) => BigNumber.from(1 + 0.75);
 var getC3 = (level) => BigNumber.from(2).pow(level);
 var getC4 = (level) => BigNumber.from(2.5).pow(level);
 
